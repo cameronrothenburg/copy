@@ -1,8 +1,8 @@
-use crate::cli::copy_args::{CopyArgs, parse_args};
-use std::{io, fs};
-use std::borrow::{Borrow};
-use std::path::{Path, PathBuf};
+use crate::cli::copy_args::{parse_args, CopyArgs};
 use rayon::prelude::*;
+use std::borrow::Borrow;
+use std::path::{Path, PathBuf};
+use std::{fs, io};
 
 pub struct Cli {
     args: CopyArgs,
@@ -23,7 +23,8 @@ impl Cli {
     pub fn execute(&mut self) {
         self.create_path_buff();
         let input_path = self.input_path.as_path().to_owned();
-        self.scan_dir(input_path.borrow()).expect("TODO: panic message");
+        self.scan_dir(input_path.borrow())
+            .expect("TODO: panic message");
         if self.files_vec.len() != 0 {
             self.copy()
         }
@@ -65,8 +66,18 @@ impl Cli {
     fn copy(&self) {
         // Only works with directory's
         self.files_vec.clone().into_par_iter().for_each(|entry| {
-            let copy_string = entry.as_path().to_str().unwrap().replace::<&str>(self.args.copy_from.borrow(), "");
-            let mut output_path_string = self.output_path.clone().as_os_str().to_str().expect("").to_owned();
+            let copy_string = entry
+                .as_path()
+                .to_str()
+                .unwrap()
+                .replace::<&str>(self.args.copy_from.borrow(), "");
+            let mut output_path_string = self
+                .output_path
+                .clone()
+                .as_os_str()
+                .to_str()
+                .expect("")
+                .to_owned();
             output_path_string.push_str(copy_string.as_str());
             let path_buffer = PathBuf::from(output_path_string);
 

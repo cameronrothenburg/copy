@@ -3,7 +3,6 @@ pub struct CopyArgs {
     pub copy_from: String,
 }
 
-
 pub fn parse_args(args: Vec<String>) -> Result<CopyArgs, &'static str> {
     if args.len() < 3 {
         panic!("Usage: <input> <output>")
@@ -13,5 +12,4 @@ pub fn parse_args(args: Vec<String>) -> Result<CopyArgs, &'static str> {
             copy_from: args[1].clone(),
         })
     }
-
 }
